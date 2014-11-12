@@ -118,7 +118,10 @@ class Collection(object):
                         nested_field_list = field.rsplit('.')
                         if len(nested_field_list) == 1:
                             arr = existing_document[field]
-                            existing_document[field] = [obj for obj in arr if not obj == value]
+                            if isinstance(value, dict):
+                                existing_document[field] = [obj for obj in arr if not filter_applies(value, obj)]
+                            else:
+                                existing_document[field] = [obj for obj in arr if not value == obj]
                             continue
 
                         # nested fields includes a positional element
